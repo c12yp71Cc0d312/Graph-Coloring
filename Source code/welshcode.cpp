@@ -1,5 +1,5 @@
 //add now
-#include <bits/stdc++.h>
+#include <iostream>
 #include <vector>
 #include <queue>
 using namespace std;
@@ -73,7 +73,7 @@ void WPALGO(int adjMat[20][20], int n) {
 				nodeColor[i].color = c;
 				
 			}
-			/
+			
 		}
 		
 		c++;
