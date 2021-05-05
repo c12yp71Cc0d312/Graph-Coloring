@@ -75,21 +75,16 @@ void colorRemainingVertices(vector< unordered_set<int> > arrNei, int &c, vector<
 	
 	for(int i = 0; i < n; i++) {
 
-        if(colors[i] == -1)
+        if(colors[i] != -1)
             continue;
 		
-		for(int j = c; j <= maxC; j++) {
-			
-			int col = j;
+		for(int col = c; col <= maxC; col++) {
 			
 			bool canColor = true;
 
             unordered_set<int> :: iterator itr;
 			
 			for(itr = arrNei[i].begin(); itr != arrNei[i].end(); itr++) {
-
-                if(present[*itr-1] == 0)
-                    continue;
 				
 				if(colors[*itr-1] == col) {
 					canColor = false;
@@ -105,7 +100,7 @@ void colorRemainingVertices(vector< unordered_set<int> > arrNei, int &c, vector<
 			
 		}
 		
-		if(colors[i] == 0) {
+		if(colors[i] == -1) {
 			maxC++;
 			colors[i] = maxC;
 		}
@@ -116,29 +111,37 @@ void colorRemainingVertices(vector< unordered_set<int> > arrNei, int &c, vector<
 
 void Wigderson(vector< unordered_set<int> > arrNei, int n, vector<int>&colors) {
 	
-	int c=1;
+	int c = 1;
 
-    vector<bool> present(n,true);
+    vector<bool> present(n, true);
 
-	for(int i=1;i<=n;i++){
-            if(arrNei[i-1].size() >= ceil(sqrt(n)) && present[i-1] ) {
-                ColorNeighbourhood(arrNei, i-1, c, colors, present);
-            
+	for(int i = 0; i < n; i++) {
+
+        int noOfNeighboursPresent = 0;
+
+        unordered_set<int> :: iterator itr;        
+
+        if(present[i]) {
+
+            for(itr = arrNei[i].begin(); itr != arrNei[i].end(); itr++) {
+
+                if(present[*itr-1] == true) {
+                    noOfNeighboursPresent++;
+                }
+
+            }    
+
+            if(noOfNeighboursPresent >= ceil(sqrt(n))) {
+
+                ColorNeighbourhood(arrNei, i, c, colors, present);
+
+            }
+
         }
+        
     }
 
-    //colorRemainingVertices(arrNei, c, colors, present);
-
-
-    // acc to wigderson algo, for remaining vertices, we color using greedy algo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // for(int i=0;i<n;i++)
-    // if(present[i]){
-    //    colors[i]=c;
-    //    present[i]=false;
-    // }
-
-    
-
+    colorRemainingVertices(arrNei, c, colors, present);
 	
 }
 
@@ -152,7 +155,7 @@ int main() {
         cout<<"\nEnter the no of nieghbours of "<<i+1<<"\n";
         int t;
         cin>>t;
-       cout <<"Enter the nieghbours\n";     
+        cout <<"Enter the nieghbours\n";     
         for(int k=0;k<t;k++){
             int r;
             cin>>r;
@@ -173,22 +176,5 @@ int main() {
     for(int i=0;i<colors.size();i++)
     cout<<"vertex"<<i+1<<"\t"<<colors[i]<<"\n";
 
-    cout<<"\n0 to exit";
-    int z;
-    cin>>z;
-
     return 0;
 }
-
-/*  
-5
-1 - 2 3    -   
-2 - 1 3    -    
-3 - 1 2 4 5
-4 - 3
-5 - 3
-hlo
-shriram chck if the output is crt i made one small change only after u went
-
-*/
-
