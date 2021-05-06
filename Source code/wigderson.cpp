@@ -2,7 +2,32 @@
 #include <vector>
 #include <unordered_set>
 using namespace std;
-
+void add_node(vector< unordered_set<int> > &f, vector<int>&colors, vector<bool> &present){
+	cout<<"\nEnter the no of nieghbours of new node \n";
+        int t;
+        cin>>t;
+	unordered_set<int> a;
+        cout <<"Enter the nieghbours\n";     
+        for(int k=0;k<t;k++){
+            int r;
+            cin>>r;
+            a.insert(r);
+        }
+	f.push_back(a);
+	colors.push_back(-1);
+	present.push_back(false);
+	colorRemainingVertices( f, 1, colors, present);
+	
+}
+void delete_node(int x,vector< unordered_set<int> > &f, vector<int>&colors, vector<bool> &present){
+ unordered_set<int>temp=f[x];
+ f.erase(f.begin()+x-1);
+ colors.erase(colors.begin()+x-1);	
+ present.erase(present.begin()+x-1);
+ for(itr = temp.begin(); itr != temp.end(); itr++){
+ f[*itr].erase(f[*itr].find(x));
+ }	
+}
 void ColorNeighbourhood(vector< unordered_set<int> > f, int i, int &c, vector<int>&colors, vector<bool> &present) {
 
     int cIncrement = 1;
