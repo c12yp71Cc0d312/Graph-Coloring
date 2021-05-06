@@ -3,6 +3,7 @@
         "vector": "cpp",
         "xhash": "cpp",
         "unordered_set": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "xstring": "cpp"
     }
 }

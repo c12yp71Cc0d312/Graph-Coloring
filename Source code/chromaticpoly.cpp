@@ -76,16 +76,19 @@ void printGraph(vector< vector<int> > adj, int V)
     }
 }
 
-string chromaticPolynomial(vector< vector<int> > adj, int v, int e) {
+void chromaticPolynomial(vector< vector<int> > adj, int v, int e, vector<int> &k) {
 
     if(e == (v*(v-1))/2) {
 
-        string poly = "x";
-        for(int i = 1; i < v; i++) {
-            poly += "(x - " + to_string(i) + ")";
-        }
+        // string poly = "x";
+        // for(int i = 1; i < v; i++) {
+        //     poly += "(x - " + to_string(i) + ")";
+        // }
+        //return poly;
 
-        return poly;
+        k[v]++;
+        
+        return;
 
     }
 
@@ -105,15 +108,9 @@ string chromaticPolynomial(vector< vector<int> > adj, int v, int e) {
 
                 if(!(find(adj[i].begin(), adj[i].end(), j) != adj[i].end())) {
 
-                    //cout<<"\ni: "<<i<<"\tj: "<<j;
-
                     addEdge(a, i, j);
-                    // cout<<"\na graph:\n";
-                    // printGraph(a,v);
 
                     mergeVertices(b, i, j);
-                    // cout<<"\nb graph:\n";
-                    // printGraph(b,v-1);
 
                     abModified = true;
 
@@ -130,7 +127,12 @@ string chromaticPolynomial(vector< vector<int> > adj, int v, int e) {
 
     }
 
-    return ( chromaticPolynomial(a, v, e+1) + " + " + chromaticPolynomial(b, v-1, countEdges(b, v-1)) );
+    chromaticPolynomial(a, v, e+1, k);
+    chromaticPolynomial(b, v-1, countEdges(b, v-1), k);
+
+    return;
+
+    //return ( chromaticPolynomial(a, v, e+1, k) + " + " + chromaticPolynomial(b, v-1, countEdges(b, v-1), k) );
 
 }
 
@@ -139,6 +141,7 @@ int main() {
     int V = 5;
     int E = 7;
     vector< vector<int> > adj(V);
+    vector<int> k(V+1, 0);
     addEdge(adj, 0, 1);
     addEdge(adj, 0, 4);
     addEdge(adj, 1, 2);
@@ -148,9 +151,45 @@ int main() {
     addEdge(adj, 3, 4);
     //printGraph(adj, V);
 
-    cout<<chromaticPolynomial(adj,V,E);
+    //cout<<chromaticPolynomial(adj,V,E,k);
+    chromaticPolynomial(adj,V,E,k);
 
-    cout<<"\n0 to exit";
+    string polynomial;
+
+    bool first = true;
+    
+    for(int i = 1; i <= V; i++) {
+
+        if(k[i] == 0)
+            continue;
+
+        string poly;
+
+        if(k[i] == 1)
+            poly = "x";
+
+        if(k[i] > 1)
+            poly = to_string(k[i]) + "x";
+
+        for(int j = 1; j < i; j++) {
+            poly += "(x - " + to_string(j) + ")";
+        }
+
+        if(first) {
+            first = false;
+            polynomial = poly;
+        }
+            
+
+        else {
+            polynomial += " + " + poly;
+        }
+
+    }
+
+    cout<<polynomial;
+
+    cout<<"\n\n0 to exit";
     int t;
     cin>>t;
     return 0;
