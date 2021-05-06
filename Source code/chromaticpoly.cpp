@@ -31,6 +31,10 @@ void mergeVertices(vector< vector<int> > &adj, int u, int v) {
                 vIndex = j;
             }
 
+            if(adj[i][j] > v) {
+                adj[i][j]--;
+            }
+
         }
 
         if(uNeighbor && (vIndex != -1)) {
@@ -39,14 +43,24 @@ void mergeVertices(vector< vector<int> > &adj, int u, int v) {
 
     }
 
+    for(int i = 0; i < adj[v].size(); i++) {
+
+        if(!(find(adj[u].begin(), adj[u].end(), adj[v][i]) != adj[u].end())) {
+            adj[u].push_back(adj[v][i]);
+        }
+
+    }
+
+    adj.erase(adj.begin() + v);
+
 }
 
 // A utility function to add an edge in an
 // undirected graph.
 void addEdge(vector< vector<int> > &adj, int u, int v)
 {
-    adj[u].push_back(v);
-    adj[v].push_back(u);
+    adj[u].push_back({v});
+    adj[v].push_back({u});
 }
  
 // A utility function to print the adjacency list
@@ -62,16 +76,23 @@ void printGraph(vector< vector<int> > adj, int V)
     }
 }
 
-/*return type*/ chromaticPolynomial(vector< vector<int> > adj, int v, int e) {
+string chromaticPolynomial(vector< vector<int> > adj, int v, int e) {
 
-    if(e = (v*(v-1))/2 ) {
+    if(e == (v*(v-1))/2) {
 
-        //return chromatic polynomial of complete graph with v vertices
+        string poly = "x";
+        for(int i = 1; i < v; i++) {
+            poly += "(x - " + to_string(i) + ")";
+        }
+
+        return poly;
 
     }
 
     vector< vector<int> > a = adj;
     vector< vector<int> > b = adj;
+
+    bool abModified = false;
 
     for(int i = 0; i < v; i++) {
 
@@ -82,17 +103,34 @@ void printGraph(vector< vector<int> > adj, int V)
                 if(j == i)
                     continue;
 
-                addEdge(a, i, j);
+                if(!(find(adj[i].begin(), adj[i].end(), j) != adj[i].end())) {
 
-                mergeVertices(adj, i, j);
+                    //cout<<"\ni: "<<i<<"\tj: "<<j;
+
+                    addEdge(a, i, j);
+                    // cout<<"\na graph:\n";
+                    // printGraph(a,v);
+
+                    mergeVertices(b, i, j);
+                    // cout<<"\nb graph:\n";
+                    // printGraph(b,v-1);
+
+                    abModified = true;
+
+                    break;
+
+                }
 
             }
 
         }
 
+        if(abModified)
+            break;
+
     }
 
-    return chromaticPolynomial(a, v, e+1) + chromaticPolynomial(b, v-1, countEdges(b, v-1));
+    return ( chromaticPolynomial(a, v, e+1) + " + " + chromaticPolynomial(b, v-1, countEdges(b, v-1)) );
 
 }
 
@@ -108,7 +146,9 @@ int main() {
     addEdge(adj, 1, 4);
     addEdge(adj, 2, 3);
     addEdge(adj, 3, 4);
-    printGraph(adj, V);
+    //printGraph(adj, V);
+
+    cout<<chromaticPolynomial(adj,V,E);
 
     cout<<"\n0 to exit";
     int t;
