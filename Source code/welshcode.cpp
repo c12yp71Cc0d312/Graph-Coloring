@@ -109,8 +109,8 @@ void WPALGO(int** adjMat, int n) {
 
 void addEdge(vector< vector<int> > &adj, int u, int v)
 {
-    adj[u].push_back({v});
-    adj[v].push_back({u});
+    adj[u].push_back(v);
+    adj[v].push_back(u);
 }
 
 void printGraph(vector< vector<int> > adj, int V)
@@ -131,7 +131,6 @@ int main() {
     cout<<"enter the no of vertices: ";
     cin>>V;
     vector< vector<int> > adj(V);
-    vector<int> k(V+1, 0);
 
     cout<<"enter the no of edges: ";
     cin>>E;

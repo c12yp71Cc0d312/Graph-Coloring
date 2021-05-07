@@ -55,8 +55,8 @@ void mergeVertices(vector< vector<int> > &adj, int u, int v) {
 
 void addEdge(vector< vector<int> > &adj, int u, int v)
 {
-    adj[u].push_back({v});
-    adj[v].push_back({u});
+    adj[u].push_back(v);
+    adj[v].push_back(u);
 }
  
 void printGraph(vector< vector<int> > adj, int V)
