@@ -1,5 +1,5 @@
 //add now
-#include <iostream>
+#include <bits/stdc++.h>
 #include <vector>
 #include <queue>
 using namespace std;
@@ -17,24 +17,42 @@ struct NodeDegree {
 	
 };
 
-struct NodeColor {
-	
-	int color;
-	
-};
+int** createAdjMat(vector< vector<int> > adj, int n) {
 
-void WPALGO(int adjMat[20][20], int n) {
+	int** adjMat = 0;
+	adjMat = new int*[n];
+
+	for(int i = 0; i < n; i++) {
+
+		adjMat[i] = new int[n];
+
+		for(int j = 0; j < n; j++) {
+
+			adjMat[i][j] = 0;
+
+		}
+
+	}
+
+	for(int i = 0; i < n; i++) {
+
+		for(int j = 0; j < adj[i].size(); j++) {
+
+			adjMat[i][adj[i][j]] = 1;
+
+		}
+
+	}
+
+	return adjMat;
+}
+
+void WPALGO(int** adjMat, int n) {
 	
 	priority_queue<NodeDegree> nodes;
 	
 	//init
-	vector<NodeColor> nodeColor;
-	for(int i = 0; i < n; i++) {
-		
-		NodeColor n = {-1};
-		nodeColor.push_back(n);
-		
-	}
+	vector<int> nodeColor(n, -1);
 	
 	for(int i = 0; i < n; i++) {
 		
@@ -60,7 +78,7 @@ void WPALGO(int adjMat[20][20], int n) {
 		
 		int highestDegVertex = nodes.top().nodeNum;
 		
-		if(nodeColor[highestDegVertex].color != -1) {
+		if(nodeColor[highestDegVertex] != -1) {
 			nodes.pop();
 			continue;
 		}
@@ -68,9 +86,9 @@ void WPALGO(int adjMat[20][20], int n) {
 		
 		for(int i = 0; i < n; i++) {
 			
-			if(adjMat[highestDegVertex][i] == 0 && nodeColor[i].color == -1) {
+			if(adjMat[highestDegVertex][i] == 0 && nodeColor[i] == -1) {
 				
-				nodeColor[i].color = c;
+				nodeColor[i] = c;
 				
 			}
 			
@@ -83,39 +101,62 @@ void WPALGO(int adjMat[20][20], int n) {
 	
 	for(int i = 0; i < n; i++) {
 		
-		cout<<"\ncolor of node "<<i+1<<" is "<<nodeColor[i].color;
+		cout<<"\ncolor of node "<<i+1<<" is "<<nodeColor[i];
 		
 	}
 	
 }
 
+void addEdge(vector< vector<int> > &adj, int u, int v)
+{
+    adj[u].push_back({v});
+    adj[v].push_back({u});
+}
+
+void printGraph(vector< vector<int> > adj, int V)
+{
+    for (int v = 0; v < V; ++v)
+    {
+        cout << "\n Adjacency list of vertex " << v << "\n head ";
+        for (int i = 0; i < adj[v].size(); i++)
+           cout << " -> " << adj[v][i];
+        cout<<endl;
+    }
+}
+
 int main() {
-    
-	char c='y';
-    do {
-	int n;
-	
-	cout<<"enter the no of vertices in the graph: ";
-	cin>>n;
-	
-	int adjMat[20][20];
-	
-	cout<<"\nenter the adjacency matrix of the graph: ";
-	
-	for(int i = 0; i < n; i++) {
-		
-		for(int j = 0; j < n; j++) {
-			
-			cin>>adjMat[i][j];
-			
-		}
-		
-	}
-	
-	WPALGO(adjMat, n);
-	cout<<"\nDo u want to continue? y/n";
-    cin>>c;
-    }while(c=='y');
+
+	int V, E;
+
+    cout<<"enter the no of vertices: ";
+    cin>>V;
+    vector< vector<int> > adj(V);
+    vector<int> k(V+1, 0);
+
+    cout<<"enter the no of edges: ";
+    cin>>E;
+
+    cout<<"\nenter the edges (start vertex   end vertex):\n";
+    for(int i = 0; i < E; i++) {
+
+        int u, v;
+        cin>>u>>v;
+
+        addEdge(adj, u-1, v-1);
+
+    }
+
+
+	int** adjMat = createAdjMat(adj, V);
+
+	cout<<"\n";
+	printGraph(adj, V);
+	cout<<"\n";
+
+	WPALGO(adjMat, V);
+
+	cout<<"\n\n";
+    system("pause");
 	return 0;
 }
 
