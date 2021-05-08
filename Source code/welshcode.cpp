@@ -259,8 +259,6 @@ void delete_vertex(vector< vector<int> > &adj, vector< vector<int> > &adjMat, ve
 
 	}
 
-
-
 }
 
 int main() {
