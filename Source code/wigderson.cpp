@@ -122,9 +122,7 @@ void colorRemainingVertices(vector< unordered_set<int> > arrNei, int &c, vector<
 
 }
 
-void Wigderson(vector< unordered_set<int> > arrNei, int n, vector<int> &colors, int &c) {
-
-    vector<bool> present(n, true);
+void Wigderson(vector< unordered_set<int> > arrNei, int n, vector<int> &colors, int &c, vector<bool> present) {
 
 	for(int i = 0; i < n; i++) {
 
@@ -179,8 +177,10 @@ void add_node(vector< unordered_set<int> > &f, vector<int> &colors, vector<bool>
 
 	f.push_back(neighbors);
 	colors.push_back(-1);
-	present.push_back(false);
+	present.push_back(true);
 	colorRemainingVertices(f, c, colors, present);
+
+    cout<<"\ncolor of new node is "<<colors[colors.back()];
 
 }
 
@@ -208,13 +208,16 @@ int main() {
 
     vector<int> colors(V,-1);
     int c = 1;
+    vector<bool> present(V, true);
 
-    Wigderson(adj, V, colors, c);
+    Wigderson(adj, V, colors, c, present);
 
     cout<<endl;
 
     for(int i=0; i < colors.size(); i++)
         cout<<"vertex"<<i+1<<"\t"<<colors[i]<<"\n";
+
+    add_node(adj, colors, present, c);
 
     cout<<"\n\n";
     system("pause");
