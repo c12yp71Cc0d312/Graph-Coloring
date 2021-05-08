@@ -53,13 +53,13 @@ void mergeVertices(vector< vector<int> > &adj, int u, int v) {
 
 }
 
-void addEdge(vector< vector<int> > &adj, int u, int v)
+void add_edge(vector< vector<int> > &adj, int u, int v)
 {
     adj[u].push_back(v);
     adj[v].push_back(u);
 }
  
-void printGraph(vector< vector<int> > adj, int V)
+void print_graph(vector< vector<int> > adj, int V)
 {
     for (int v = 0; v < V; ++v)
     {
@@ -93,7 +93,7 @@ void chromaticPolynomial(vector< vector<int> > adj, int v, int e, vector<int> &k
 
                 if(!(find(adj[i].begin(), adj[i].end(), j) != adj[i].end())) {
 
-                    addEdge(a, i, j);
+                    add_edge(a, i, j);
 
                     mergeVertices(b, i, j);
 
@@ -121,30 +121,7 @@ void chromaticPolynomial(vector< vector<int> > adj, int v, int e, vector<int> &k
 
 }
 
-int main() {
-
-    int V, E;
-
-    cout<<"enter the no of vertices: ";
-    cin>>V;
-    vector< vector<int> > adj(V);
-    vector<int> k(V+1, 0);
-
-    cout<<"enter the no of edges: ";
-    cin>>E;
-
-    cout<<"\nenter the edges (start vertex   end vertex):\n";
-    for(int i = 0; i < E; i++) {
-
-        int u, v;
-        cin>>u>>v;
-
-        addEdge(adj, u-1, v-1);
-
-    }
-
-    cout<<"\nthe chromatic polynomial is:\n";
-    chromaticPolynomial(adj,V,E,k);
+string generatePoly(int V, vector<int> k) {
 
     string polynomial;
 
@@ -179,11 +156,41 @@ int main() {
 
     }
 
-    cout<<polynomial;
-
-
-    cout<<"\n\n";
-    system("pause");
-    return 0;
+    return polynomial;
 
 }
+
+// int main() {
+
+//     int V, E;
+
+//     cout<<"enter the no of vertices: ";
+//     cin>>V;
+//     vector< vector<int> > adj(V);
+//     vector<int> k(V+1, 0);
+
+//     cout<<"enter the no of edges: ";
+//     cin>>E;
+
+//     cout<<"\nenter the edges (start vertex   end vertex):\n";
+//     for(int i = 0; i < E; i++) {
+
+//         int u, v;
+//         cin>>u>>v;
+
+//         add_edge(adj, u-1, v-1);
+
+//     }
+
+
+//     chromaticPolynomial(adj,V,E,k);
+//     string polynomial = generatePoly(V, k);
+//     cout<<"\nthe chromatic polynomial is:\n";
+//     cout<<polynomial;
+
+
+//     cout<<"\n\n";
+//     system("pause");
+//     return 0;
+
+// }

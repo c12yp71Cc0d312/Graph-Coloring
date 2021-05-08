@@ -2,6 +2,7 @@
 #include <bits/stdc++.h>
 #include <vector>
 #include <queue>
+#include "chromaticpoly.cpp"
 using namespace std;
 
 struct NodeDegree {
@@ -16,6 +17,28 @@ struct NodeDegree {
     }
 	
 };
+
+struct node {
+    int clr;
+    unordered_set<int> neigh;
+};
+
+void rainbowNeighbor(vector<node> vert, int n, int k) {
+    for(int i =0; i<n; i++)
+    {
+        cout << "vertex " << i+1 <<endl;
+        unordered_set<int> :: iterator itr;
+        unordered_set<int> tempClr;
+        for(itr = vert[i].neigh.begin(); itr != vert[i].neigh.end(); itr++)
+        {
+            tempClr.insert(vert[*itr-1].clr);
+            cout << vert[*itr-1].clr << endl;
+        }
+        if(tempClr.size() == k-1)
+            cout << "size is k-1 hence this vertex is a rainbow Neighbor" << endl;
+    }
+}
+
 
 vector<vector<int>> createAdjMat(vector< vector<int> > adj, int n) {
 
@@ -159,7 +182,7 @@ void colorVertex(vector<vector <int> > adj, int x, int &c, vector<int> &nodeColo
 
 }
 
-void add_vertex(vector< vector<int> > &adj, vector< vector<int> > &adjMat, int &c, vector<int> &nodeColor, int &n) {
+void add_vertex(vector< vector<int> > &adj, vector< vector<int> > &adjMat, int &c, vector<int> &nodeColor, int &v, int &e) {
 
 	int t;
 	cout<<"\n\nenter no of neighbors of new vertex: ";
@@ -171,7 +194,7 @@ void add_vertex(vector< vector<int> > &adj, vector< vector<int> > &adjMat, int &
 	//adjMat[x] = new int[x+1];
 	nodeColor.push_back(-1);
 
-	vector<int> zeroVec(n, 0);
+	vector<int> zeroVec(v, 0);
 	adjMat.push_back(zeroVec);
 
 	// for(int i = 0; i < x+1; i++) {
@@ -193,16 +216,19 @@ void add_vertex(vector< vector<int> > &adj, vector< vector<int> > &adjMat, int &
 
 	colorVertex(adj, x, c, nodeColor);
 
-	n++;
+	v++;
+	e += t;
 
 }
 
-void delete_vertex(vector< vector<int> > &adj, vector< vector<int> > &adjMat, vector<int> &nodeColor, int &n) {
+void delete_vertex(vector< vector<int> > &adj, vector< vector<int> > &adjMat, vector<int> &nodeColor, int &v, int &e) {
 
 	int x;
 	cout<<"\n\nenter vertex to be deleted: ";
 	cin>>x;
 	x--;
+
+	int t = adj[x].size();
 
 	adj.erase(adj.begin() + x);
 	nodeColor.erase(nodeColor.begin() + x);
@@ -234,15 +260,15 @@ void delete_vertex(vector< vector<int> > &adj, vector< vector<int> > &adjMat, ve
 	//delete [] adjMat[x];
 	adjMat.erase(adjMat.begin() + x);
 
-	cout<<"\nrow x deleted";
+	// cout<<"\nrow x deleted";
 
-	cout<<"\nn - 1 value"<<n-1;
+	// cout<<"\nn - 1 value"<<v-1;
 
-	for(int i = 0; i < n - 1; i++) {
+	for(int i = 0; i < v - 1; i++) {
 
 		cout<<"\ninside row "<<i;
 
-		for(int j = x; j < n - 1; j++) {
+		for(int j = x; j < v - 1; j++) {
 
 			cout<<"\n\tchecking "<<j<<"th ele of the row";
 
@@ -258,6 +284,9 @@ void delete_vertex(vector< vector<int> > &adj, vector< vector<int> > &adjMat, ve
 		cout<<"\n\tmade last ele null";
 
 	}
+
+	v--;
+	e -= t;
 
 }
 
@@ -294,17 +323,34 @@ int main() {
 
 	WPALGO(adjMat, V, c, nodeColor);
 
-	add_vertex(adj, adjMat, c, nodeColor, V);
+	/*  Call insert funcion */
+	add_vertex(adj, adjMat, c, nodeColor, V, E);
 
 	// cout<<"\n";
 	// printGraph(adj, V);
 	// cout<<"\n";
 
-	delete_vertex(adj, adjMat, nodeColor, V);
+	/*  Call delete funcion */
+	delete_vertex(adj, adjMat, nodeColor, V, E);
 
 	cout<<"\n";
 	printGraph(adj, V);
 	cout<<"\n";
+	
+	/*  Call chromatic validator funcion */
+
+
+	/*  Call rainbow funcion */
+	vector<node> vv(5);
+	vv = { {1, {2, 3}}, {2, {1, 3}}, {3, {1,2,4,5}}, {1, {3}}, {1, {3}} };
+    rainbowNeighbor(vv, 5, 3);
+	
+	/*  Call chromatic polynomial funcion */
+	vector<int> k(V+1, 0);
+	chromaticPolynomial(adj,V,E,k);
+    string polynomial = generatePoly(V, k);
+    cout<<"\nthe chromatic polynomial is:\n";
+    cout<<polynomial;
 
 	cout<<"\n\n";
     system("pause");
