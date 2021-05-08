@@ -47,12 +47,12 @@ int** createAdjMat(vector< vector<int> > adj, int n) {
 	return adjMat;
 }
 
-void WPALGO(int** adjMat, int n) {
+void WPALGO(int** adjMat, int n, int &c, vector<int> &nodeColor) {
 	
 	priority_queue<NodeDegree> nodes;
 	
 	//init
-	vector<int> nodeColor(n, -1);
+	//vector<int> nodeColor(n, -1);
 	
 	for(int i = 0; i < n; i++) {
 		
@@ -72,7 +72,7 @@ void WPALGO(int** adjMat, int n) {
 		
 	}
 	
-	int c = 1;
+	//int c = 1;
 	
 	while(nodes.size() > 0) {
 		
@@ -124,6 +124,71 @@ void printGraph(vector< vector<int> > adj, int V)
     }
 }
 
+void colorVertex(vector<vector <int> > adj, int x, int &c, vector<int> &nodeColor) {
+
+	for(int col = 1; col < c; col++) {
+
+		bool colorChosen = true;
+
+		for(int i = 0; i < adj[x].size(); i++) {
+		
+			if(nodeColor[adj[x][i]] == col) {
+				colorChosen = false;
+				break;
+			}
+
+		}
+
+		if(colorChosen) {
+			nodeColor[x] = col;
+			break;
+		}
+
+	}
+
+	if(nodeColor[x] == -1) {
+		nodeColor[x] = c;
+		c++;
+	}
+
+	cout<<"\ncolor of new vertex is "<<nodeColor[x];
+	
+
+}
+
+void add_vertex(vector< vector<int> > &adj, int** &adjMat, int &c, vector<int> &nodeColor) {
+
+	int t;
+	cout<<"\n\nenter no of neighbors of new vertex: ";
+	cin>>t;
+
+	int x = adj.size();
+
+	adj.resize(x+1);
+	adjMat[x] = new int[x+1];
+	nodeColor.push_back(-1);
+
+	for(int i = 0; i < x+1; i++) {
+		adjMat[x][i] = 0;
+	}
+
+	cout<<"enter the neighbors: ";
+	for(int i = 0; i < t; i++) {
+
+		int n;
+		cin>>n;
+
+		adj[n-1].push_back(x);
+		adj[x].push_back(n-1);
+
+		adjMat[x][n-1] = 1;
+
+	}
+
+	colorVertex(adj, x, c, nodeColor);
+
+}
+
 int main() {
 
 	int V, E;
@@ -152,7 +217,12 @@ int main() {
 	printGraph(adj, V);
 	cout<<"\n";
 
-	WPALGO(adjMat, V);
+	int c = 1;
+	vector<int> nodeColor(V, -1);
+
+	WPALGO(adjMat, V, c, nodeColor);
+
+	add_vertex(adj, adjMat, c, nodeColor);
 
 	cout<<"\n\n";
     system("pause");

@@ -3,54 +3,6 @@
 #include <unordered_set>
 using namespace std;
 
-// void delete_node(vector< unordered_set<int> > &f, vector<int> &colors, vector<bool> &present) {
-
-//     int x;
-//     cout<<"\nenter the vertex to delete: ";
-//     cin>>x;
-//     x--;
-
-//     f.erase(f.begin() + x);
-//     colors.erase(colors.begin() + x);	
-//     present.erase(present.begin() + x);
-
-//     for(int i = 0; i < f.size(); i++) {
-
-//         unordered_set<int> :: iterator itr;
-//         unordered_set<int> :: iterator delItr;
-//         vector<unordered_set<int> :: iterator> decItr;
-
-//         bool nodeDel = false;
-
-//         for(itr = f[i].begin(); itr != f[i].end(); itr++) {
-
-//             if(*itr == x) {
-//                 delItr = itr;
-//                 nodeDel = true;
-//             }
-
-//             else if(*itr > x) {
-//                 decItr.push_back(itr);
-//             }
-
-//         }
-
-//         cout<<"\nchecked vertex "<<i+1;
-        
-//         if(nodeDel)
-//             f[i].erase(delItr);
-
-//         for(int i = 0; i < decItr.size(); i++) {
-//             int val = *decItr[i] - 1;
-//             f[i].erase(decItr[i]);
-//             f[i].insert(val);
-//         }
-
-
-//     }
-
-// }
-
 void ColorNeighbourhood(vector<unordered_set<int>> f, int i, int &c, vector<int> &colors, vector<bool> &present)
 {
 
