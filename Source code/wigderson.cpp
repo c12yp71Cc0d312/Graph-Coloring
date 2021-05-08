@@ -152,7 +152,7 @@ void addEdge(vector< unordered_set<int> > &adj, int u, int v)
     adj[v - 1].insert(u);
 }
 
-void add_node(vector< unordered_set<int> > &f, vector<int> &colors, vector<bool> &present, int &c) {
+void add_node(vector< unordered_set<int> > &f, vector<int> &colors, vector<bool> &present, int &c, int &v) {
 
     int t;
     unordered_set<int> neighbors;
@@ -179,9 +179,11 @@ void add_node(vector< unordered_set<int> > &f, vector<int> &colors, vector<bool>
 
     cout<<endl;
 
+    v++;
+
 }
 
-void delete_node(vector<unordered_set<int>> &f, vector<int> &colors, vector<bool> &present)
+void delete_node(vector<unordered_set<int>> &f, vector<int> &colors, vector<bool> &present, int &v)
 {
     cout << "\nEnter the node to be deleted\n";
     int x;
@@ -228,6 +230,8 @@ void delete_node(vector<unordered_set<int>> &f, vector<int> &colors, vector<bool
 
     }
 
+    v--;
+
 }
 
 int main() {
@@ -263,9 +267,9 @@ int main() {
     for(int i=0; i < colors.size(); i++)
         cout<<"vertex"<<i+1<<"\t"<<colors[i]<<"\n";
 
-    add_node(adj, colors, present, c);
+    add_node(adj, colors, present, c, V);
 
-    delete_node(adj, colors, present);
+    delete_node(adj, colors, present, V);
 
     cout<<endl;
     for(int i=0; i < colors.size(); i++)
