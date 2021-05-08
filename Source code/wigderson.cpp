@@ -3,17 +3,52 @@
 #include <unordered_set>
 using namespace std;
 
+// void delete_node(vector< unordered_set<int> > &f, vector<int> &colors, vector<bool> &present) {
 
-	
-// }
-// void delete_node(int x,vector< unordered_set<int> > &f, vector<int>&colors, vector<bool> &present){
-//  unordered_set<int>temp=f[x];
-//  f.erase(f.begin()+x-1);
-//  colors.erase(colors.begin()+x-1);	
-//  present.erase(present.begin()+x-1);
-//  for(itr = temp.begin(); itr != temp.end(); itr++){
-//  f[*itr].erase(f[*itr].find(x));
-//  }	
+//     int x;
+//     cout<<"\nenter the vertex to delete: ";
+//     cin>>x;
+//     x--;
+
+//     f.erase(f.begin() + x);
+//     colors.erase(colors.begin() + x);	
+//     present.erase(present.begin() + x);
+
+//     for(int i = 0; i < f.size(); i++) {
+
+//         unordered_set<int> :: iterator itr;
+//         unordered_set<int> :: iterator delItr;
+//         vector<unordered_set<int> :: iterator> decItr;
+
+//         bool nodeDel = false;
+
+//         for(itr = f[i].begin(); itr != f[i].end(); itr++) {
+
+//             if(*itr == x) {
+//                 delItr = itr;
+//                 nodeDel = true;
+//             }
+
+//             else if(*itr > x) {
+//                 decItr.push_back(itr);
+//             }
+
+//         }
+
+//         cout<<"\nchecked vertex "<<i+1;
+        
+//         if(nodeDel)
+//             f[i].erase(delItr);
+
+//         for(int i = 0; i < decItr.size(); i++) {
+//             int val = *decItr[i] - 1;
+//             f[i].erase(decItr[i]);
+//             f[i].insert(val);
+//         }
+
+
+//     }
+
 // }
 
 void ColorNeighbourhood(vector< unordered_set<int> > f, int i, int &c, vector<int>&colors, vector<bool> &present) {
@@ -168,11 +203,14 @@ void add_node(vector< unordered_set<int> > &f, vector<int> &colors, vector<bool>
 	cout<<"\nEnter the no of nieghbours of new node \n";
     cin>>t;
 	
+    int x = f.size() - 1;
+
     cout <<"Enter the nieghbours:\n";     
-    for(int i=0; i<t; i++) {
+    for(int i = 0; i < t; i++) {
         int r;
         cin>>r;
         neighbors.insert(r - 1);
+        f[r-1].insert(x);
     }
 
 	f.push_back(neighbors);
@@ -218,6 +256,12 @@ int main() {
         cout<<"vertex"<<i+1<<"\t"<<colors[i]<<"\n";
 
     add_node(adj, colors, present, c);
+
+    delete_node(adj, colors, present);
+
+    cout<<endl;
+    for(int i=0; i < colors.size(); i++)
+        cout<<"vertex"<<i+1<<"\t"<<colors[i]<<"\n";
 
     cout<<"\n\n";
     system("pause");
