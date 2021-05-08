@@ -17,22 +17,25 @@ struct NodeDegree {
 	
 };
 
-int** createAdjMat(vector< vector<int> > adj, int n) {
+vector<vector<int>> createAdjMat(vector< vector<int> > adj, int n) {
 
-	int** adjMat = 0;
-	adjMat = new int*[n];
+	// int** adjMat = 0;
+	// adjMat = new int*[n];
 
-	for(int i = 0; i < n; i++) {
+	vector<int> zeroRow(n, 0);
+	vector< vector<int> > adjMat(n, zeroRow);
 
-		adjMat[i] = new int[n];
+	// for(int i = 0; i < n; i++) {
 
-		for(int j = 0; j < n; j++) {
+	// 	adjMat[i] = new int[n];
 
-			adjMat[i][j] = 0;
+	// 	for(int j = 0; j < n; j++) {
 
-		}
+	// 		adjMat[i][j] = 0;
 
-	}
+	// 	}
+
+	// }
 
 	for(int i = 0; i < n; i++) {
 
@@ -47,7 +50,7 @@ int** createAdjMat(vector< vector<int> > adj, int n) {
 	return adjMat;
 }
 
-void WPALGO(int** adjMat, int n, int &c, vector<int> &nodeColor) {
+void WPALGO(vector< vector<int> > adjMat, int n, int &c, vector<int> &nodeColor) {
 	
 	priority_queue<NodeDegree> nodes;
 	
@@ -117,9 +120,9 @@ void printGraph(vector< vector<int> > adj, int V)
 {
     for (int v = 0; v < V; ++v)
     {
-        cout << "\n Adjacency list of vertex " << v << "\n head ";
+        cout << "\n Adjacency list of vertex " << v+1 << "\n head ";
         for (int i = 0; i < adj[v].size(); i++)
-           cout << " -> " << adj[v][i];
+           cout << " -> " << adj[v][i]+1;
         cout<<endl;
     }
 }
@@ -156,7 +159,7 @@ void colorVertex(vector<vector <int> > adj, int x, int &c, vector<int> &nodeColo
 
 }
 
-void add_vertex(vector< vector<int> > &adj, int** &adjMat, int &c, vector<int> &nodeColor) {
+void add_vertex(vector< vector<int> > &adj, vector< vector<int> > &adjMat, int &c, vector<int> &nodeColor, int &n) {
 
 	int t;
 	cout<<"\n\nenter no of neighbors of new vertex: ";
@@ -165,12 +168,15 @@ void add_vertex(vector< vector<int> > &adj, int** &adjMat, int &c, vector<int> &
 	int x = adj.size();
 
 	adj.resize(x+1);
-	adjMat[x] = new int[x+1];
+	//adjMat[x] = new int[x+1];
 	nodeColor.push_back(-1);
 
-	for(int i = 0; i < x+1; i++) {
-		adjMat[x][i] = 0;
-	}
+	vector<int> zeroVec(n, 0);
+	adjMat.push_back(zeroVec);
+
+	// for(int i = 0; i < x+1; i++) {
+	// 	adjMat[x][i] = 0;
+	// }
 
 	cout<<"enter the neighbors: ";
 	for(int i = 0; i < t; i++) {
@@ -186,6 +192,74 @@ void add_vertex(vector< vector<int> > &adj, int** &adjMat, int &c, vector<int> &
 	}
 
 	colorVertex(adj, x, c, nodeColor);
+
+	n++;
+
+}
+
+void delete_vertex(vector< vector<int> > &adj, vector< vector<int> > &adjMat, vector<int> &nodeColor, int &n) {
+
+	int x;
+	cout<<"\n\nenter vertex to be deleted: ";
+	cin>>x;
+	x--;
+
+	adj.erase(adj.begin() + x);
+	nodeColor.erase(nodeColor.begin() + x);
+
+	for(int i = 0; i < adj.size(); i++) {
+
+		vector<int> neighbors;
+
+		for(int j = 0; j < adj[i].size(); j++) {
+
+			if(adj[i][j] == x)
+				continue;
+
+			if(adj[i][j] > x)
+				neighbors.push_back(adj[i][j] - 1);
+			
+			else
+				neighbors.push_back(adj[i][j]);
+
+		}
+
+		adj.erase(adj.begin() + i);
+		adj.emplace(adj.begin() + i, neighbors);
+
+	}
+
+	cout<<"\nadj updated";
+
+	//delete [] adjMat[x];
+	adjMat.erase(adjMat.begin() + x);
+
+	cout<<"\nrow x deleted";
+
+	cout<<"\nn - 1 value"<<n-1;
+
+	for(int i = 0; i < n - 1; i++) {
+
+		cout<<"\ninside row "<<i;
+
+		for(int j = x; j < n - 1; j++) {
+
+			cout<<"\n\tchecking "<<j<<"th ele of the row";
+
+			adjMat[i][j] = adjMat[i][j+1];
+
+		}
+
+		cout<<"\n\tmaking last ele null";
+
+		//adjMat[i][n-1] = -1;
+		adjMat[i].pop_back();
+
+		cout<<"\n\tmade last ele null";
+
+	}
+
+
 
 }
 
@@ -211,7 +285,7 @@ int main() {
     }
 
 
-	int** adjMat = createAdjMat(adj, V);
+	vector< vector<int> > adjMat = createAdjMat(adj, V);
 
 	cout<<"\n";
 	printGraph(adj, V);
@@ -222,7 +296,17 @@ int main() {
 
 	WPALGO(adjMat, V, c, nodeColor);
 
-	add_vertex(adj, adjMat, c, nodeColor);
+	add_vertex(adj, adjMat, c, nodeColor, V);
+
+	// cout<<"\n";
+	// printGraph(adj, V);
+	// cout<<"\n";
+
+	delete_vertex(adj, adjMat, nodeColor, V);
+
+	cout<<"\n";
+	printGraph(adj, V);
+	cout<<"\n";
 
 	cout<<"\n\n";
     system("pause");
