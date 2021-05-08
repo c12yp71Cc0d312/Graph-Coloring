@@ -2,32 +2,20 @@
 #include <vector>
 #include <unordered_set>
 using namespace std;
-void add_node(vector< unordered_set<int> > &f, vector<int>&colors, vector<bool> &present){
-	cout<<"\nEnter the no of nieghbours of new node \n";
-        int t;
-        cin>>t;
-	unordered_set<int> a;
-        cout <<"Enter the nieghbours\n";     
-        for(int k=0;k<t;k++){
-            int r;
-            cin>>r;
-            a.insert(r);
-        }
-	f.push_back(a);
-	colors.push_back(-1);
-	present.push_back(false);
-	colorRemainingVertices( f, 1, colors, present);
+
+
 	
-}
-void delete_node(int x,vector< unordered_set<int> > &f, vector<int>&colors, vector<bool> &present){
- unordered_set<int>temp=f[x];
- f.erase(f.begin()+x-1);
- colors.erase(colors.begin()+x-1);	
- present.erase(present.begin()+x-1);
- for(itr = temp.begin(); itr != temp.end(); itr++){
- f[*itr].erase(f[*itr].find(x));
- }	
-}
+// }
+// void delete_node(int x,vector< unordered_set<int> > &f, vector<int>&colors, vector<bool> &present){
+//  unordered_set<int>temp=f[x];
+//  f.erase(f.begin()+x-1);
+//  colors.erase(colors.begin()+x-1);	
+//  present.erase(present.begin()+x-1);
+//  for(itr = temp.begin(); itr != temp.end(); itr++){
+//  f[*itr].erase(f[*itr].find(x));
+//  }	
+// }
+
 void ColorNeighbourhood(vector< unordered_set<int> > f, int i, int &c, vector<int>&colors, vector<bool> &present) {
 
     int cIncrement = 1;
@@ -39,45 +27,45 @@ void ColorNeighbourhood(vector< unordered_set<int> > f, int i, int &c, vector<in
 
 	for(itr = f[i].begin(); itr != f[i].end(); itr++) {
 
-        if(present[*itr-1] == false)
+        if(present[*itr] == false)
             continue;
 
-        if(colors[*itr-1] != -1)
+        if(colors[*itr] != -1)
             continue;
         
-        for(itr2 = f[*itr-1].begin(); itr2 != f[*itr-1].end(); itr2++) {
+        for(itr2 = f[*itr].begin(); itr2 != f[*itr].end(); itr2++) {
             
             if(f[i].count(*itr2)) {
 
                 cIncrement = 2;
                 //2-colorable case
 
-                if(colors[*itr-1] == -1 && colors[*itr2-1] == -1) {
-                    colors[*itr-1] = c;
-                    colors[*itr2-1] = c+1;
+                if(colors[*itr] == -1 && colors[*itr2] == -1) {
+                    colors[*itr] = c;
+                    colors[*itr2] = c+1;
                 }
 
-                else if(colors[*itr-1] == c && colors[*itr2-1] == -1) {
-                    colors[*itr2-1] = c+1;
+                else if(colors[*itr] == c && colors[*itr2] == -1) {
+                    colors[*itr2] = c+1;
                 }
 
-                else if(colors[*itr-1] == c+1 && colors[*itr2-1] == -1) {
-                    colors[*itr2-1] = c;
+                else if(colors[*itr] == c+1 && colors[*itr2] == -1) {
+                    colors[*itr2] = c;
                 }
 
-                else if(colors[*itr2-1] == c && colors[*itr-1] == -1) {
-                    colors[*itr-1] = c+1;
+                else if(colors[*itr2] == c && colors[*itr] == -1) {
+                    colors[*itr] = c+1;
                 }
 
-                else if(colors[*itr2-1] == c+1 && colors[*itr-1] == -1) {
-                    colors[*itr-1] = c;
+                else if(colors[*itr2] == c+1 && colors[*itr] == -1) {
+                    colors[*itr] = c;
                 }
             }
 
         }
 
-        if(colors[*itr-1] == -1)
-            colors[*itr-1] = c;
+        if(colors[*itr] == -1)
+            colors[*itr] = c;
 
     }
 
@@ -86,7 +74,7 @@ void ColorNeighbourhood(vector< unordered_set<int> > f, int i, int &c, vector<in
     
     for(itr = f[i].begin(); itr != f[i].end(); itr++) {
 
-        present[*itr-1] = false;
+        present[*itr] = false;
 
     }
 
@@ -111,7 +99,7 @@ void colorRemainingVertices(vector< unordered_set<int> > arrNei, int &c, vector<
 			
 			for(itr = arrNei[i].begin(); itr != arrNei[i].end(); itr++) {
 				
-				if(colors[*itr-1] == col) {
+				if(colors[*itr] == col) {
 					canColor = false;
 					break;
 				}
@@ -134,9 +122,7 @@ void colorRemainingVertices(vector< unordered_set<int> > arrNei, int &c, vector<
 
 }
 
-void Wigderson(vector< unordered_set<int> > arrNei, int n, vector<int>&colors) {
-	
-	int c = 1;
+void Wigderson(vector< unordered_set<int> > arrNei, int n, vector<int> &colors, int &c) {
 
     vector<bool> present(n, true);
 
@@ -150,7 +136,7 @@ void Wigderson(vector< unordered_set<int> > arrNei, int n, vector<int>&colors) {
 
             for(itr = arrNei[i].begin(); itr != arrNei[i].end(); itr++) {
 
-                if(present[*itr-1] == true) {
+                if(present[*itr] == true) {
                     noOfNeighboursPresent++;
                 }
 
@@ -170,36 +156,67 @@ void Wigderson(vector< unordered_set<int> > arrNei, int n, vector<int>&colors) {
 	
 }
 
-int main() {
-	int n;
-	cout<<"enter the no of vertices in the graph: ";
-	cin>>n;
-	vector< unordered_set<int> > f(n);
-    vector<int> colors(n,-1);
-    for(int i =0;i<n;i++){
-        cout<<"\nEnter the no of nieghbours of "<<i+1<<"\n";
-        int t;
-        cin>>t;
-        cout <<"Enter the nieghbours\n";     
-        for(int k=0;k<t;k++){
-            int r;
-            cin>>r;
-            f[i].insert(r);
-        }
-        
-    }
-    cout<<"\n\n";
-    unordered_set<int> :: iterator itr;
-   /* for(int i=0;i<n;i++){
-       for (itr = f[i].begin(); itr != f[i].end(); itr++)
-        cout << *itr << " ";
-       cout<<"\n";
-    }
-    */
-	//okk now we need to implement neighbor coloring....as mentioned in line 16
-    Wigderson(f,n,colors);
-    for(int i=0;i<colors.size();i++)
-    cout<<"vertex"<<i+1<<"\t"<<colors[i]<<"\n";
+void addEdge(vector< unordered_set<int> > &adj, int u, int v)
+{
+    adj[u].insert(v);
+    adj[v].insert(u);
+}
 
+void add_node(vector< unordered_set<int> > &f, vector<int> &colors, vector<bool> &present, int &c) {
+
+    int t;
+    unordered_set<int> neighbors;
+
+	cout<<"\nEnter the no of nieghbours of new node \n";
+    cin>>t;
+	
+    cout <<"Enter the nieghbours:\n";     
+    for(int i=0; i<t; i++) {
+        int r;
+        cin>>r;
+        neighbors.insert(r - 1);
+    }
+
+	f.push_back(neighbors);
+	colors.push_back(-1);
+	present.push_back(false);
+	colorRemainingVertices(f, c, colors, present);
+
+}
+
+int main() {
+
+    int V, E;
+
+    cout<<"enter the no of vertices: ";
+    cin>>V;
+    vector< unordered_set<int> > adj(V);
+    vector<int> k(V+1, 0);
+
+    cout<<"enter the no of edges: ";
+    cin>>E;
+
+    cout<<"\nenter the edges (start vertex   end vertex):\n";
+    for(int i = 0; i < E; i++) {
+
+        int u, v;
+        cin>>u>>v;
+
+        addEdge(adj, u-1, v-1);
+
+    }
+
+    vector<int> colors(V,-1);
+    int c = 1;
+
+    Wigderson(adj, V, colors, c);
+
+    cout<<endl;
+
+    for(int i=0; i < colors.size(); i++)
+        cout<<"vertex"<<i+1<<"\t"<<colors[i]<<"\n";
+
+    cout<<"\n\n";
+    system("pause");
     return 0;
 }
