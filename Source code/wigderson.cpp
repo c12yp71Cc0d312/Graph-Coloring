@@ -51,68 +51,73 @@ using namespace std;
 
 // }
 
-void ColorNeighbourhood(vector< unordered_set<int> > f, int i, int &c, vector<int>&colors, vector<bool> &present) {
+void ColorNeighbourhood(vector<unordered_set<int>> f, int i, int &c, vector<int> &colors, vector<bool> &present)
+{
 
     int cIncrement = 1;
 
-    unordered_set<int> :: iterator itr;
-    unordered_set<int> :: iterator itr2;
+    unordered_set<int>::iterator itr;
+    unordered_set<int>::iterator itr2;
     //itr indicates value of neighbor of i
     //itr2 indicates value of neighbor of neighbor of i
 
-	for(itr = f[i].begin(); itr != f[i].end(); itr++) {
+    for (itr = f[i].begin(); itr != f[i].end(); itr++)
+    {
 
-        if(present[*itr] == false)
+        if (present[*itr - 1] == false)
             continue;
 
-        if(colors[*itr] != -1)
+        if (colors[*itr - 1] != -1)
             continue;
-        
-        for(itr2 = f[*itr].begin(); itr2 != f[*itr].end(); itr2++) {
-            
-            if(f[i].count(*itr2)) {
+
+        for (itr2 = f[*itr - 1].begin(); itr2 != f[*itr - 1].end(); itr2++)
+        {
+
+            if (f[i].count(*itr2))
+            {
 
                 cIncrement = 2;
                 //2-colorable case
 
-                if(colors[*itr] == -1 && colors[*itr2] == -1) {
-                    colors[*itr] = c;
-                    colors[*itr2] = c+1;
+                if (colors[*itr - 1] == -1 && colors[*itr2 - 1] == -1)
+                {
+                    colors[*itr - 1] = c;
+                    colors[*itr2 - 1] = c + 1;
                 }
 
-                else if(colors[*itr] == c && colors[*itr2] == -1) {
-                    colors[*itr2] = c+1;
+                else if (colors[*itr - 1] == c && colors[*itr2 - 1] == -1)
+                {
+                    colors[*itr2 - 1] = c + 1;
                 }
 
-                else if(colors[*itr] == c+1 && colors[*itr2] == -1) {
-                    colors[*itr2] = c;
+                else if (colors[*itr - 1] == c + 1 && colors[*itr2 - 1] == -1)
+                {
+                    colors[*itr2 - 1] = c;
                 }
 
-                else if(colors[*itr2] == c && colors[*itr] == -1) {
-                    colors[*itr] = c+1;
+                else if (colors[*itr2 - 1] == c && colors[*itr - 1] == -1)
+                {
+                    colors[*itr - 1] = c + 1;
                 }
 
-                else if(colors[*itr2] == c+1 && colors[*itr] == -1) {
-                    colors[*itr] = c;
+                else if (colors[*itr2 - 1] == c + 1 && colors[*itr - 1] == -1)
+                {
+                    colors[*itr - 1] = c;
                 }
             }
-
         }
 
-        if(colors[*itr] == -1)
-            colors[*itr] = c;
+        if (colors[*itr - 1] == -1)
+            colors[*itr - 1] = c;
 
     }
 
     c += cIncrement;
 
-    
-    for(itr = f[i].begin(); itr != f[i].end(); itr++) {
-
-        present[*itr] = false;
-
+    for (itr = f[i].begin(); itr != f[i].end(); itr++)
+    {
+        present[*itr - 1] = false;
     }
-
 }
 
 void colorRemainingVertices(vector< unordered_set<int> > arrNei, int &c, vector<int> &colors, vector<bool> &present) {
@@ -134,7 +139,7 @@ void colorRemainingVertices(vector< unordered_set<int> > arrNei, int &c, vector<
 			
 			for(itr = arrNei[i].begin(); itr != arrNei[i].end(); itr++) {
 				
-				if(colors[*itr] == col) {
+				if(colors[*itr - 1] == col) {
 					canColor = false;
 					break;
 				}
@@ -169,7 +174,7 @@ void Wigderson(vector< unordered_set<int> > arrNei, int n, vector<int> &colors, 
 
             for(itr = arrNei[i].begin(); itr != arrNei[i].end(); itr++) {
 
-                if(present[*itr] == true) {
+                if(present[*itr - 1] == true) {
                     noOfNeighboursPresent++;
                 }
 
@@ -191,8 +196,8 @@ void Wigderson(vector< unordered_set<int> > arrNei, int n, vector<int> &colors, 
 
 void addEdge(vector< unordered_set<int> > &adj, int u, int v)
 {
-    adj[u].insert(v);
-    adj[v].insert(u);
+    adj[u - 1].insert(v);
+    adj[v - 1].insert(u);
 }
 
 void add_node(vector< unordered_set<int> > &f, vector<int> &colors, vector<bool> &present, int &c) {
@@ -203,13 +208,13 @@ void add_node(vector< unordered_set<int> > &f, vector<int> &colors, vector<bool>
 	cout<<"\nEnter the no of nieghbours of new node \n";
     cin>>t;
 	
-    int x = f.size() - 1;
+    int x = f.size() + 1;
 
     cout <<"Enter the nieghbours:\n";     
     for(int i = 0; i < t; i++) {
         int r;
         cin>>r;
-        neighbors.insert(r - 1);
+        neighbors.insert(r);
         f[r-1].insert(x);
     }
 
@@ -219,6 +224,57 @@ void add_node(vector< unordered_set<int> > &f, vector<int> &colors, vector<bool>
 	colorRemainingVertices(f, c, colors, present);
 
     cout<<"\ncolor of new node is "<<colors[colors.back()];
+
+    cout<<endl;
+
+}
+
+void delete_node(vector<unordered_set<int>> &f, vector<int> &colors, vector<bool> &present)
+{
+    cout << "\nEnter the node to be deleted\n";
+    int x;
+    cin >> x;
+    unordered_set<int> temp = f[x];
+    f.erase(f.begin() + x - 1);
+    colors.erase(colors.begin() + x - 1);
+    present.erase(present.begin() + x - 1);
+    cout << "\n\n";
+    for (int i = 0; i < f.size(); i++)
+    {
+        unordered_set<int>::iterator itr;
+        unordered_set<int> temp;
+        for (itr = f[i].begin(); itr != f[i].end(); itr++) {
+
+            int t = *itr;
+
+            if(t>x){
+                t--;
+                temp.insert(t);
+            }
+            else if(t<x){
+                temp.insert(t);
+            }
+
+        }
+
+        f.erase(f.begin()+i);
+        f.insert(f.begin() + i,temp);
+        temp.erase(temp.begin(), temp.end());
+
+    }
+
+    cout << "\n\nNew set of vertices are: ";
+    for (int i = 0; i < f.size(); i++)
+    {
+        unordered_set<int>::iterator itr;
+
+        cout<<"\nneighbors of vertex "<<i+1<<"are: ";
+        for (itr = f[i].begin(); itr != f[i].end(); itr++)
+        {
+            cout << *itr << "  ";
+        }
+
+    }
 
 }
 
@@ -240,7 +296,7 @@ int main() {
         int u, v;
         cin>>u>>v;
 
-        addEdge(adj, u-1, v-1);
+        addEdge(adj, u, v);
 
     }
 
