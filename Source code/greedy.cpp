@@ -1,7 +1,27 @@
 #include <bits/stdc++.h>
 #include <vector>
 using namespace std;
-
+void add_node(vector< vector<int> > g){
+	cout<<"\nEnter the no of nieghbours of new node \n";
+        int t;
+        cin>>t;
+	vector<int> a;
+        cout <<"Enter the nieghbours\n";     
+        for(int k=0;k<t;k++){
+            int r;
+            cin>>r;
+            a.push_back(r);
+        }
+	g.push_back(a);
+	greedyColor(g);	
+}
+void delete_node(vector< vector<int> > g){
+	cout<<"\nEnter the node to be deleted\n";
+	int x;
+	cin>>x;
+	g.erase(g.begin()-x);
+	greedyColor(g);
+ }
 void greedyColor(vector< vector<int> > g) {
 
 	int n = g.size();
