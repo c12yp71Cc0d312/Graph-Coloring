@@ -3,6 +3,7 @@
 #include <unordered_set>
 #include "chromaticpoly.cpp"
 #include "rainbow.cpp"
+#include "mcoloring.cpp"
 using namespace std;
 
 struct node {
@@ -345,7 +346,10 @@ int main() {
 
 
     /*  Call chromaticValidator funcion */
-
+    int y;
+	cout<<"\n\nenter no of colors to check whether graph can be colored with at max: ";
+	cin>>y;
+	kChromaticValidation(adjVec, V, y);
 
 
     /*  Call rainbow function*/

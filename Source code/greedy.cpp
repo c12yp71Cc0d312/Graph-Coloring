@@ -248,7 +248,7 @@ int main() {
 	
 	/*  Call chromatic validator funcion */
 	int y;
-	cout<<"\n\nenter no of colors to check whether graph can be colored with: ";
+	cout<<"\n\nenter no of colors to check whether graph can be colored with at max: ";
 	cin>>y;
 	kChromaticValidation(adj, V, y);
 
