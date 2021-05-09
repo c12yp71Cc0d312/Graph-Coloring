@@ -85,12 +85,7 @@ void WPALGO(vector< vector<int> > adjMat, int n, int &c, vector<int> &nodeColor)
 		nodes.pop();
 		
 	}
-	
-	for(int i = 0; i < n; i++) {
-		
-		cout<<"\ncolor of node "<<i+1<<" is "<<nodeColor[i];
-		
-	}
+
 	
 }
 
@@ -274,38 +269,75 @@ int main() {
 	printGraph(adj, V);
 	displayColors(nodeColor);
 
-	/*  Call insert funcion */
-	add_vertex(adj, adjMat, c, nodeColor, V, E);
-	printGraph(adj, V);
-	displayColors(nodeColor);
+	int ch;
+	do
+	{
+		int op;
+		cout << "\n\nenter operation to perform\n1.add vertex\n2.delete vertex\n3.check if graph can be colored with atmost k colors\n4.rainbow neighborhood\n5.chromatic polynomial\nenter choice: ";
+		cin >> op;
 
-	/*  Call delete funcion */
-	delete_vertex(adj, adjMat, nodeColor, V, E);
-	printGraph(adj, V);
-	displayColors(nodeColor);
-	
-	/*  Call chromatic validator funcion */
-	int y;
-	cout<<"\n\nenter no of colors to check whether graph can be colored with at max: ";
-	cin>>y;
-	kChromaticValidation(adj, V, y);
+		switch (op)
+		{
 
-	/*  Call rainbow funcion */
-	int x;
-    cout<<"\n\nenter the vertex to check for rainbow neighborhood: ";
-    cin>>x;
-	bool rainbow = rainbowNeighborhood(adj, x-1, nodeColor, c-1);
-	if(rainbow)
-		cout<<"\nvertex "<<x<<" is in a rainbow neighborhood";
-	else
-		cout<<"\nvertex "<<x<<" is not in a rainbow neighborhood";
-	
-	/*  Call chromatic polynomial funcion */
-	vector<int> k(V+1, 0);
-	chromaticPolynomial(adj,V,E,k);
-    string polynomial = generatePoly(V, k);
-    cout<<"\n\nthe chromatic polynomial is:\n";
-    cout<<polynomial;
+		case 1:
+		{
+			add_vertex(adj, adjMat, c, nodeColor, V, E);
+			printGraph(adj, V);
+			displayColors(nodeColor);
+			break;
+		}
+
+		case 2:
+		{
+			delete_vertex(adj, adjMat, nodeColor, V, E);
+			printGraph(adj, V);
+			displayColors(nodeColor);
+			break;
+		}
+
+		case 3:
+		{
+			int y;
+			cout<<"\n\nenter no of colors to check whether graph can be colored with at max: ";
+			cin>>y;
+			kChromaticValidation(adj, V, y);
+			break;
+		}
+
+		case 4:
+		{
+			int x;
+			cout<<"\n\nenter the vertex to check for rainbow neighborhood: ";
+			cin>>x;
+			bool rainbow = rainbowNeighborhood(adj, x-1, nodeColor, c-1);
+			if(rainbow)
+				cout<<"\nvertex "<<x<<" is in a rainbow neighborhood";
+			else
+				cout<<"\nvertex "<<x<<" is not in a rainbow neighborhood";
+			break;
+		}
+
+		case 5:
+		{
+			vector<int> k(V+1, 0);
+			chromaticPolynomial(adj,V,E,k);
+			string polynomial = generatePoly(V, k);
+			cout<<"\n\nthe chromatic polynomial is:\n";
+			cout<<polynomial;
+			break;
+		}
+
+		default:
+		{
+			cout << "\ninvalid choice";
+			break;
+		}
+		}
+
+		cout << "\n\nperform another operation?(1-yes): ";
+		cin >> ch;
+
+	} while (ch == 1);	
 
 	cout<<"\n\n";
     system("pause");

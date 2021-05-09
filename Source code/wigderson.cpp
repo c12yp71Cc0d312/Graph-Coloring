@@ -325,43 +325,77 @@ int main() {
     printGraph(adjVec, V);
 	displayColors(colors);
 
-    /*  Call insert funcion */
-    add_node(adj, adjVec, colors, present, c, V, E);
-    printGraph(adjVec, V);
-	displayColors(colors);
+    int ch;
+	do
+	{
+		int op;
+		cout << "\n\nenter operation to perform\n1.add vertex\n2.delete vertex\n3.check if graph can be colored with atmost k colors\n4.rainbow neighborhood\n5.chromatic polynomial\nenter choice: ";
+		cin >> op;
 
-    /*  Call delete funcion */
-    delete_node(adj, adjVec, colors, present, V, E);
-    printGraph(adjVec, V);
-	displayColors(colors);
+		switch (op)
+		{
 
+		case 1:
+		{
+			add_node(adj, adjVec, colors, present, c, V, E);
+            printGraph(adjVec, V);
+            displayColors(colors);
+			break;
+		}
 
-    /*  Call chromaticValidator funcion */
-    int y;
-	cout<<"\n\nenter no of colors to check whether graph can be colored with at max: ";
-	cin>>y;
-	kChromaticValidation(adjVec, V, y);
+		case 2:
+		{
+			delete_node(adj, adjVec, colors, present, V, E);
+            printGraph(adjVec, V);
+            displayColors(colors);
+			break;
+		}
 
+		case 3:
+		{
+			int y;
+            cout<<"\n\nenter no of colors to check whether graph can be colored with at max: ";
+            cin>>y;
+            kChromaticValidation(adjVec, V, y);
+			break;
+		}
 
-    /*  Call rainbow function*/
-    int x;
-    cout<<"\n\nenter the vertex to check for rainbow neighborhood: ";
-    cin>>x;
-	bool rainbow = rainbowNeighborhood(adjVec, x-1, colors, c);
-	if(rainbow)
-		cout<<"\nvertex "<<x<<" is in a rainbow neighborhood";
-	else
-		cout<<"\nvertex "<<x<<" is not in a rainbow neighborhood";
+		case 4:
+		{
+			int x;
+            cout<<"\n\nenter the vertex to check for rainbow neighborhood: ";
+            cin>>x;
+            bool rainbow = rainbowNeighborhood(adjVec, x-1, colors, c);
+            if(rainbow)
+                cout<<"\nvertex "<<x<<" is in a rainbow neighborhood";
+            else
+                cout<<"\nvertex "<<x<<" is not in a rainbow neighborhood";
+			break;
+		}
 
+		case 5:
+		{
+			vector<int> k(V+1, 0);
+            chromaticPolynomial(adjVec, V, E, k);
+            string polynomial = generatePoly(V, k);
+            cout<<"\n\nthe chromatic polynomial is:\n";
+            cout<<polynomial;
+			break;
+		}
 
+		default:
+		{
+			cout << "\ninvalid choice";
+			break;
+		}
 
-    /*  Call chromatic polynomial funcion */
-    vector<int> k(V+1, 0);
-	chromaticPolynomial(adjVec, V, E, k);
-    string polynomial = generatePoly(V, k);
-    cout<<"\n\nthe chromatic polynomial is:\n";
-    cout<<polynomial;
+        }
+		
 
+		cout << "\n\nperform another operation?(1-yes): ";
+		cin >> ch;
+
+	} while (ch == 1);
 
     cout<<"\n\n";
     system("pause");
