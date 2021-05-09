@@ -3,6 +3,7 @@
 #include <unordered_set>
 #include "chromaticpoly.cpp"
 #include "rainbow.cpp"
+#include "mcoloring.cpp"
 using namespace std;
 
 // struct node {
@@ -246,12 +247,15 @@ int main() {
 	cout<<"\n";	
 	
 	/*  Call chromatic validator funcion */
-
+	int y;
+	cout<<"\n\nenter no of colors to check whether graph can be colored with: ";
+	cin>>y;
+	kChromaticValidation(adj, V, y);
 
 
 	/*  Call rainbow funcion */
 	int x;
-    cout<<"\n enter the vertex to check for rainbow neighborhood: ";
+    cout<<"\nenter the vertex to check for rainbow neighborhood: ";
     cin>>x;
 	bool rainbow = rainbowNeighborhood(adj, x-1, colors, maxC);
 	if(rainbow)
