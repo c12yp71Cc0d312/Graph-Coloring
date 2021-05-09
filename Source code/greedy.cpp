@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #include <vector>
 #include <unordered_set>
+#include "chromaticpoly.cpp"
 using namespace std;
 
 struct node {
@@ -123,7 +124,7 @@ void printGraph(vector< vector<int> > adj, int V)
     }
 }
 
-void add_vertex(vector< vector<int> > &adj, int &maxC, vector<int> &colors, int &n) {
+void add_vertex(vector< vector<int> > &adj, int &maxC, vector<int> &colors, int &v, int &e) {
 
 	int t;
 	cout<<"\n\nenter no of neighbors of new vertex: ";
@@ -157,16 +158,19 @@ void add_vertex(vector< vector<int> > &adj, int &maxC, vector<int> &colors, int 
 
 	greedyColor(adj, colors, maxC, true);
 
-	n++;
+	v++;
+	e += t;
 
 }
 
-void delete_vertex(vector< vector<int> > &adj, vector<int> &colors, int &n) {
+void delete_vertex(vector< vector<int> > &adj, vector<int> &colors, int &v, int &e) {
 
 	int x;
 	cout<<"\n\nenter vertex to be deleted: ";
 	cin>>x;
 	x--;
+
+	int t = adj[x].size();
 
 	adj.erase(adj.begin() + x);
 	colors.erase(colors.begin() + x);
@@ -195,7 +199,8 @@ void delete_vertex(vector< vector<int> > &adj, vector<int> &colors, int &n) {
 
 	cout<<"\nadj updated";
 
-	n--;
+	v--;
+	e -= t;
 
 }
 
@@ -225,30 +230,38 @@ int main() {
 
 	greedyColor(adj, colors, maxC, false);
 
-	add_vertex(adj, maxC, colors, V);
-
-	cout<<"\n";
-	printGraph(adj, V);
-	cout<<"\n";
-
-	delete_vertex(adj, colors, V);
-
-	cout<<"\n";
-	printGraph(adj, V);
-	cout<<"\n";
-
-	
-	cout<<"\n\n";
-    system("pause");
-
 	/*  Call insert funcion */
+	add_vertex(adj, maxC, colors, V, E);
+
+	cout<<"\n";
+	printGraph(adj, V);
+	cout<<"\n";
+
 	/*  Call delete funcion */
+	delete_vertex(adj, colors, V, E);
+
+	cout<<"\n";
+	printGraph(adj, V);
+	cout<<"\n";	
+	
 	/*  Call chromatic validator funcion */
+
+
+
 	/*  Call rainbow funcion */
 	vector<node> vv(5);
 	vv = { {1, {2, 3}}, {2, {1, 3}}, {3, {1,2,4,5}}, {1, {3}}, {1, {3}} };
     rainbowNeighbor(vv, 5, 3);
 	
 	/*  Call chromatic polynomial funcion */
+	vector<int> k(V+1, 0);
+	chromaticPolynomial(adj,V,E,k);
+    string polynomial = generatePoly(V, k);
+    cout<<"\nthe chromatic polynomial is:\n";
+    cout<<polynomial;
+
+
+	cout<<"\n\n";
+    system("pause");
 	return 0;
 }

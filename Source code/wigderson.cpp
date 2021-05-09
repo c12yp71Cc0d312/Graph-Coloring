@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #include <vector>
 #include <unordered_set>
+#include "chromaticpoly.cpp"
 using namespace std;
 
 struct node {
@@ -167,13 +168,16 @@ void Wigderson(vector< unordered_set<int> > arrNei, int n, vector<int> &colors, 
 	
 }
 
-void addEdge(vector< unordered_set<int> > &adj, int u, int v)
+void addEdge(vector< unordered_set<int> > &adj, vector< vector<int> > &adjVec, int u, int v)
 {
     adj[u - 1].insert(v);
     adj[v - 1].insert(u);
+
+    adjVec[u-1].push_back(v-1);
+    adjVec[v-1].push_back(u-1);
 }
 
-void add_node(vector< unordered_set<int> > &f, vector<int> &colors, vector<bool> &present, int &c, int &v) {
+void add_node(vector< unordered_set<int> > &f, vector< vector<int> > &adjVec, vector<int> &colors, vector<bool> &present, int &c, int &v, int &e) {
 
     int t;
     unordered_set<int> neighbors;
@@ -183,12 +187,18 @@ void add_node(vector< unordered_set<int> > &f, vector<int> &colors, vector<bool>
 	
     int x = f.size() + 1;
 
+    adjVec.resize(x);
+
     cout <<"Enter the nieghbours:\n";     
     for(int i = 0; i < t; i++) {
         int r;
         cin>>r;
+
         neighbors.insert(r);
         f[r-1].insert(x);
+
+        adjVec[r-1].push_back(x-1);
+        adjVec[x-1].push_back(r-1);
     }
 
 	f.push_back(neighbors);
@@ -200,19 +210,31 @@ void add_node(vector< unordered_set<int> > &f, vector<int> &colors, vector<bool>
 
     cout<<endl;
 
+
+    //updating adjVec
+
+
+
     v++;
+    e += t;
 
 }
 
-void delete_node(vector<unordered_set<int>> &f, vector<int> &colors, vector<bool> &present, int &v)
+void delete_node(vector<unordered_set<int>> &f, vector< vector<int> > &adjVec, vector<int> &colors, vector<bool> &present, int &v, int &e)
 {
     cout << "\nEnter the node to be deleted\n";
     int x;
     cin >> x;
+
+    int t = adjVec[x-1].size();
+
     unordered_set<int> temp = f[x];
     f.erase(f.begin() + x - 1);
     colors.erase(colors.begin() + x - 1);
     present.erase(present.begin() + x - 1);
+
+    adjVec.erase(adjVec.begin() + x - 1);
+
     cout << "\n\n";
     for (int i = 0; i < f.size(); i++)
     {
@@ -238,6 +260,32 @@ void delete_node(vector<unordered_set<int>> &f, vector<int> &colors, vector<bool
 
     }
 
+
+    //updating adjVec
+    for(int i = 0; i < adjVec.size(); i++) {
+
+		vector<int> neighbors;
+
+		for(int j = 0; j < adjVec[i].size(); j++) {
+
+			if(adjVec[i][j] == x-1)
+				continue;
+
+			if(adjVec[i][j] > x-1)
+				neighbors.push_back(adjVec[i][j] - 1);
+			
+			else
+				neighbors.push_back(adjVec[i][j]);
+
+		}
+
+		adjVec.erase(adjVec.begin() + i);
+		adjVec.emplace(adjVec.begin() + i, neighbors);
+
+	}
+
+
+
     cout << "\n\nNew set of vertices are: ";
     for (int i = 0; i < f.size(); i++)
     {
@@ -252,6 +300,7 @@ void delete_node(vector<unordered_set<int>> &f, vector<int> &colors, vector<bool
     }
 
     v--;
+    e -= t;
 
 }
 
@@ -262,7 +311,7 @@ int main() {
     cout<<"enter the no of vertices: ";
     cin>>V;
     vector< unordered_set<int> > adj(V);
-    vector<int> k(V+1, 0);
+    vector< vector<int> > adjVec(V);
 
     cout<<"enter the no of edges: ";
     cin>>E;
@@ -273,7 +322,7 @@ int main() {
         int u, v;
         cin>>u>>v;
 
-        addEdge(adj, u, v);
+        addEdge(adj, adjVec, u, v);
 
     }
 
@@ -289,10 +338,10 @@ int main() {
         cout<<"vertex"<<i+1<<"\t"<<colors[i]<<"\n";
 
     /*  Call insert funcion */
-    add_node(adj, colors, present, c, V);
+    add_node(adj, adjVec, colors, present, c, V, E);
 
     /*  Call delete funcion */
-    delete_node(adj, colors, present, V);
+    delete_node(adj, adjVec, colors, present, V, E);
 
     cout<<endl;
     for(int i=0; i < colors.size(); i++)
@@ -307,6 +356,12 @@ int main() {
     rainbowNeighbor(vv, 5, 3);
 
     /*  Call chromatic polynomial funcion */
+    vector<int> k(V+1, 0);
+	chromaticPolynomial(adjVec, V, E, k);
+    string polynomial = generatePoly(V, k);
+    cout<<"\nthe chromatic polynomial is:\n";
+    cout<<polynomial;
+
 
     cout<<"\n\n";
     system("pause");
