@@ -2,28 +2,29 @@
 #include <vector>
 #include <unordered_set>
 #include "chromaticpoly.cpp"
+#include "rainbow.cpp"
 using namespace std;
 
-struct node {
-    int clr;
-    unordered_set<int> neigh;
-};
+// struct node {
+//     int clr;
+//     unordered_set<int> neigh;
+// };
 
-void rainbowNeighbor(vector<node> vert, int n, int k) {
-    for(int i =0; i<n; i++)
-    {
-        cout << "vertex " << i+1 <<endl;
-        unordered_set<int> :: iterator itr;
-        unordered_set<int> tempClr;
-        for(itr = vert[i].neigh.begin(); itr != vert[i].neigh.end(); itr++)
-        {
-            tempClr.insert(vert[*itr-1].clr);
-            cout << vert[*itr-1].clr << endl;
-        }
-        if(tempClr.size() == k-1)
-            cout << "size is k-1 hence this vertex is a rainbow Neighbor" << endl;
-    }
-}
+// void rainbowNeighbor(vector<node> vert, int n, int k) {
+//     for(int i =0; i<n; i++)
+//     {
+//         cout << "vertex " << i+1 <<endl;
+//         unordered_set<int> :: iterator itr;
+//         unordered_set<int> tempClr;
+//         for(itr = vert[i].neigh.begin(); itr != vert[i].neigh.end(); itr++)
+//         {
+//             tempClr.insert(vert[*itr-1].clr);
+//             cout << vert[*itr-1].clr << endl;
+//         }
+//         if(tempClr.size() == k-1)
+//             cout << "size is k-1 hence this vertex is a rainbow Neighbor" << endl;
+//     }
+// }
 
 
 void greedyColor(vector< vector<int> > g, vector<int> &colors, int &maxC, bool addVertex) {
@@ -249,15 +250,20 @@ int main() {
 
 
 	/*  Call rainbow funcion */
-	vector<node> vv(5);
-	vv = { {1, {2, 3}}, {2, {1, 3}}, {3, {1,2,4,5}}, {1, {3}}, {1, {3}} };
-    rainbowNeighbor(vv, 5, 3);
-	
+	int x;
+    cout<<"\n enter the vertex to check for rainbow neighborhood: ";
+    cin>>x;
+	bool rainbow = rainbowNeighborhood(adj, x-1, colors, maxC);
+	if(rainbow)
+		cout<<"\nvertex "<<x<<" is in a rainbow neighborhood";
+	else
+		cout<<"\nvertex "<<x<<" is not in a rainbow neighborhood";
+
 	/*  Call chromatic polynomial funcion */
 	vector<int> k(V+1, 0);
 	chromaticPolynomial(adj,V,E,k);
     string polynomial = generatePoly(V, k);
-    cout<<"\nthe chromatic polynomial is:\n";
+    cout<<"\n\nthe chromatic polynomial is:\n";
     cout<<polynomial;
 
 

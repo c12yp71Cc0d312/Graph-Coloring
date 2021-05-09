@@ -2,6 +2,7 @@
 #include <vector>
 #include <unordered_set>
 #include "chromaticpoly.cpp"
+#include "rainbow.cpp"
 using namespace std;
 
 struct node {
@@ -210,11 +211,6 @@ void add_node(vector< unordered_set<int> > &f, vector< vector<int> > &adjVec, ve
 
     cout<<endl;
 
-
-    //updating adjVec
-
-
-
     v++;
     e += t;
 
@@ -350,10 +346,19 @@ int main() {
 
     /*  Call chromaticValidator funcion */
 
+
+
     /*  Call rainbow function*/
-    vector<node> vv(5);
-	vv = { {1, {2, 3}}, {2, {1, 3}}, {3, {1,2,4,5}}, {1, {3}}, {1, {3}} };
-    rainbowNeighbor(vv, 5, 3);
+    int x;
+    cout<<"\n enter the vertex to check for rainbow neighborhood: ";
+    cin>>x;
+	bool rainbow = rainbowNeighborhood(adjVec, x-1, colors, c);
+	if(rainbow)
+		cout<<"\nvertex "<<x<<" is in a rainbow neighborhood";
+	else
+		cout<<"\nvertex "<<x<<" is not in a rainbow neighborhood";
+
+
 
     /*  Call chromatic polynomial funcion */
     vector<int> k(V+1, 0);
