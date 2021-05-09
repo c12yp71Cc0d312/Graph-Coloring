@@ -6,27 +6,6 @@
 #include "mcoloring.cpp"
 using namespace std;
 
-struct node {
-    int clr;
-    unordered_set<int> neigh;
-};
-
-void rainbowNeighbor(vector<node> vert, int n, int k) {
-    for(int i =0; i<n; i++)
-    {
-        cout << "vertex " << i+1 <<endl;
-        unordered_set<int> :: iterator itr;
-        unordered_set<int> tempClr;
-        for(itr = vert[i].neigh.begin(); itr != vert[i].neigh.end(); itr++)
-        {
-            tempClr.insert(vert[*itr-1].clr);
-            cout << vert[*itr-1].clr << endl;
-        }
-        if(tempClr.size() == k-1)
-            cout << "size is k-1 hence this vertex is a rainbow Neighbor" << endl;
-    }
-}
-
 void ColorNeighbourhood(vector<unordered_set<int>> f, int i, int &c, vector<int> &colors, vector<bool> &present)
 {
 
@@ -136,6 +115,8 @@ void colorRemainingVertices(vector< unordered_set<int> > arrNei, int &c, vector<
 		
 	}
 
+    c = maxC;
+
 }
 
 void Wigderson(vector< unordered_set<int> > arrNei, int n, vector<int> &colors, int &c, vector<bool> present) {
@@ -184,14 +165,14 @@ void add_node(vector< unordered_set<int> > &f, vector< vector<int> > &adjVec, ve
     int t;
     unordered_set<int> neighbors;
 
-	cout<<"\nEnter the no of nieghbours of new node \n";
+	cout<<"\n\nEnter the no of nieghbours of new node: ";
     cin>>t;
 	
     int x = f.size() + 1;
 
     adjVec.resize(x);
 
-    cout <<"Enter the nieghbours:\n";     
+    cout <<"Enter the nieghbours:";     
     for(int i = 0; i < t; i++) {
         int r;
         cin>>r;
@@ -206,11 +187,12 @@ void add_node(vector< unordered_set<int> > &f, vector< vector<int> > &adjVec, ve
 	f.push_back(neighbors);
 	colors.push_back(-1);
 	present.push_back(true);
-	colorRemainingVertices(f, c, colors, present);
 
-    cout<<"\ncolor of new node is "<<colors[colors.back()];
+    int tempC = 1;
+	colorRemainingVertices(f, tempC, colors, present);
 
-    cout<<endl;
+    if(tempC > c)
+        c = tempC;
 
     v++;
     e += t;
@@ -281,23 +263,35 @@ void delete_node(vector<unordered_set<int>> &f, vector< vector<int> > &adjVec, v
 
 	}
 
-
-
-    cout << "\n\nNew set of vertices are: ";
-    for (int i = 0; i < f.size(); i++)
-    {
-        unordered_set<int>::iterator itr;
-
-        cout<<"\nneighbors of vertex "<<i+1<<"are: ";
-        for (itr = f[i].begin(); itr != f[i].end(); itr++)
-        {
-            cout << *itr << "  ";
-        }
-
-    }
-
     v--;
     e -= t;
+
+}
+
+void printGraph(vector< vector<int> > adj, int V)
+{
+	cout<<endl;
+
+    for (int v = 0; v < V; ++v)
+    {
+        cout << "\n Adjacency list of vertex " << v+1 << "\n head ";
+        for (int i = 0; i < adj[v].size(); i++)
+           cout << " -> " << adj[v][i]+1;
+        cout<<endl;
+    }
+
+	cout<<endl;
+}
+
+void displayColors(vector<int> colors) {
+
+	cout<<endl;
+
+	for(int i = 0; i < colors.size(); i++) {
+		
+		cout<<"\ncolor of vertex "<<i+1<<" is: "<<colors[i];
+		
+	}
 
 }
 
@@ -328,21 +322,18 @@ int main() {
     vector<bool> present(V, true);
 
     Wigderson(adj, V, colors, c, present);
-
-    cout<<endl;
-
-    for(int i=0; i < colors.size(); i++)
-        cout<<"vertex"<<i+1<<"\t"<<colors[i]<<"\n";
+    printGraph(adjVec, V);
+	displayColors(colors);
 
     /*  Call insert funcion */
     add_node(adj, adjVec, colors, present, c, V, E);
+    printGraph(adjVec, V);
+	displayColors(colors);
 
     /*  Call delete funcion */
     delete_node(adj, adjVec, colors, present, V, E);
-
-    cout<<endl;
-    for(int i=0; i < colors.size(); i++)
-        cout<<"vertex"<<i+1<<"\t"<<colors[i]<<"\n";
+    printGraph(adjVec, V);
+	displayColors(colors);
 
 
     /*  Call chromaticValidator funcion */
@@ -354,7 +345,7 @@ int main() {
 
     /*  Call rainbow function*/
     int x;
-    cout<<"\n enter the vertex to check for rainbow neighborhood: ";
+    cout<<"\n\nenter the vertex to check for rainbow neighborhood: ";
     cin>>x;
 	bool rainbow = rainbowNeighborhood(adjVec, x-1, colors, c);
 	if(rainbow)
@@ -368,7 +359,7 @@ int main() {
     vector<int> k(V+1, 0);
 	chromaticPolynomial(adjVec, V, E, k);
     string polynomial = generatePoly(V, k);
-    cout<<"\nthe chromatic polynomial is:\n";
+    cout<<"\n\nthe chromatic polynomial is:\n";
     cout<<polynomial;
 
 

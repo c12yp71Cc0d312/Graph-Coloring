@@ -1,10 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
-//hello mohan
-// #define V 4
  
 void printSolution(vector<int> color, int V);
-
 
 bool isSafe(vector<vector<bool>> graph, vector<int> color, int V)
 {
@@ -12,6 +9,7 @@ bool isSafe(vector<vector<bool>> graph, vector<int> color, int V)
         for (int j = i + 1; j < V; j++)
             if (graph[i][j] && color[j] == color[i])
                 return false;
+                
     return true;
 }
 
@@ -67,25 +65,4 @@ void kChromaticValidation(vector<vector<int>> adj, int v, int k) {
     if (!graphColoring(adjMat, k, 0, color, v))
         cout << "Solution does not exist";
 
-
 }
- 
-// int main()
-// {
-//     bool graph[V][V] = {
-//         { 0, 1, 1, 1 },
-//         { 1, 0, 1, 0 },
-//         { 1, 1, 0, 1 },
-//         { 1, 0, 1, 0 },
-//     };
-//     int m = 3; 
- 
-//     int color[V];
-//     for (int i = 0; i < V; i++)
-//         color[i] = 0;
- 
-//     if (!graphColoring(graph, m, 0, color))
-//         cout << "Solution does not exist";
- 
-//     return 0;
-// }

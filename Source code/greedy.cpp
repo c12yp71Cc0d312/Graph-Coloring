@@ -6,28 +6,6 @@
 #include "mcoloring.cpp"
 using namespace std;
 
-// struct node {
-//     int clr;
-//     unordered_set<int> neigh;
-// };
-
-// void rainbowNeighbor(vector<node> vert, int n, int k) {
-//     for(int i =0; i<n; i++)
-//     {
-//         cout << "vertex " << i+1 <<endl;
-//         unordered_set<int> :: iterator itr;
-//         unordered_set<int> tempClr;
-//         for(itr = vert[i].neigh.begin(); itr != vert[i].neigh.end(); itr++)
-//         {
-//             tempClr.insert(vert[*itr-1].clr);
-//             cout << vert[*itr-1].clr << endl;
-//         }
-//         if(tempClr.size() == k-1)
-//             cout << "size is k-1 hence this vertex is a rainbow Neighbor" << endl;
-//     }
-// }
-
-
 void greedyColor(vector< vector<int> > g, vector<int> &colors, int &maxC, bool addVertex) {
 
 	int n = g.size();
@@ -101,12 +79,18 @@ void greedyColor(vector< vector<int> > g, vector<int> &colors, int &maxC, bool a
 		
 	}
 	
-	for(int i = 0; i < n; i++) {
+}
+
+void displayColors(vector<int> colors) {
+
+	cout<<endl;
+
+	for(int i = 0; i < colors.size(); i++) {
 		
 		cout<<"\ncolor of vertex "<<i+1<<" is: "<<colors[i];
 		
 	}
-	
+
 }
 
 void addEdge(vector< vector<int> > &adj, int u, int v)
@@ -117,6 +101,8 @@ void addEdge(vector< vector<int> > &adj, int u, int v)
 
 void printGraph(vector< vector<int> > adj, int V)
 {
+	cout<<endl;
+
     for (int v = 0; v < V; ++v)
     {
         cout << "\n Adjacency list of vertex " << v+1 << "\n head ";
@@ -124,6 +110,8 @@ void printGraph(vector< vector<int> > adj, int V)
            cout << " -> " << adj[v][i]+1;
         cout<<endl;
     }
+
+	cout<<endl;
 }
 
 void add_vertex(vector< vector<int> > &adj, int &maxC, vector<int> &colors, int &v, int &e) {
@@ -135,15 +123,8 @@ void add_vertex(vector< vector<int> > &adj, int &maxC, vector<int> &colors, int 
 	int x = adj.size();
 
 	adj.resize(x+1);
-	//adjMat[x] = new int[x+1];
+
 	colors.push_back(-1);
-
-	// vector<int> zeroVec(n, 0);
-	// adjMat.push_back(zeroVec);
-
-	// for(int i = 0; i < x+1; i++) {
-	// 	adjMat[x][i] = 0;
-	// }
 
 	cout<<"enter the neighbors: ";
 	for(int i = 0; i < t; i++) {
@@ -153,8 +134,6 @@ void add_vertex(vector< vector<int> > &adj, int &maxC, vector<int> &colors, int 
 
 		adj[n-1].push_back(x);
 		adj[x].push_back(n-1);
-
-		// adjMat[x][n-1] = 1;
 
 	}
 
@@ -199,8 +178,6 @@ void delete_vertex(vector< vector<int> > &adj, vector<int> &colors, int &v, int 
 
 	}
 
-	cout<<"\nadj updated";
-
 	v--;
 	e -= t;
 
@@ -231,20 +208,18 @@ int main() {
 	int maxC = 1;
 
 	greedyColor(adj, colors, maxC, false);
+	printGraph(adj, V);
+	displayColors(colors);
 
 	/*  Call insert funcion */
 	add_vertex(adj, maxC, colors, V, E);
-
-	cout<<"\n";
 	printGraph(adj, V);
-	cout<<"\n";
+	displayColors(colors);
 
 	/*  Call delete funcion */
 	delete_vertex(adj, colors, V, E);
-
-	cout<<"\n";
 	printGraph(adj, V);
-	cout<<"\n";	
+	displayColors(colors);
 	
 	/*  Call chromatic validator funcion */
 	int y;
@@ -255,7 +230,7 @@ int main() {
 
 	/*  Call rainbow funcion */
 	int x;
-    cout<<"\nenter the vertex to check for rainbow neighborhood: ";
+    cout<<"\n\nenter the vertex to check for rainbow neighborhood: ";
     cin>>x;
 	bool rainbow = rainbowNeighborhood(adj, x-1, colors, maxC);
 	if(rainbow)

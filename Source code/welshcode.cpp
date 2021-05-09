@@ -23,23 +23,8 @@ struct NodeDegree {
 
 vector<vector<int>> createAdjMat(vector< vector<int> > adj, int n) {
 
-	// int** adjMat = 0;
-	// adjMat = new int*[n];
-
 	vector<int> zeroRow(n, 0);
 	vector< vector<int> > adjMat(n, zeroRow);
-
-	// for(int i = 0; i < n; i++) {
-
-	// 	adjMat[i] = new int[n];
-
-	// 	for(int j = 0; j < n; j++) {
-
-	// 		adjMat[i][j] = 0;
-
-	// 	}
-
-	// }
 
 	for(int i = 0; i < n; i++) {
 
@@ -58,9 +43,6 @@ void WPALGO(vector< vector<int> > adjMat, int n, int &c, vector<int> &nodeColor)
 	
 	priority_queue<NodeDegree> nodes;
 	
-	//init
-	//vector<int> nodeColor(n, -1);
-	
 	for(int i = 0; i < n; i++) {
 		
 		NodeDegree node;
@@ -78,8 +60,6 @@ void WPALGO(vector< vector<int> > adjMat, int n, int &c, vector<int> &nodeColor)
 		nodes.push(node);
 		
 	}
-	
-	//int c = 1;
 	
 	while(nodes.size() > 0) {
 		
@@ -122,6 +102,8 @@ void addEdge(vector< vector<int> > &adj, int u, int v)
 
 void printGraph(vector< vector<int> > adj, int V)
 {
+	cout<<endl;
+
     for (int v = 0; v < V; ++v)
     {
         cout << "\n Adjacency list of vertex " << v+1 << "\n head ";
@@ -129,6 +111,20 @@ void printGraph(vector< vector<int> > adj, int V)
            cout << " -> " << adj[v][i]+1;
         cout<<endl;
     }
+
+	cout<<endl;
+}
+
+void displayColors(vector<int> colors) {
+
+	cout<<endl;
+
+	for(int i = 0; i < colors.size(); i++) {
+		
+		cout<<"\ncolor of vertex "<<i+1<<" is: "<<colors[i];
+		
+	}
+
 }
 
 void colorVertex(vector<vector <int> > adj, int x, int &c, vector<int> &nodeColor) {
@@ -158,9 +154,6 @@ void colorVertex(vector<vector <int> > adj, int x, int &c, vector<int> &nodeColo
 		c++;
 	}
 
-	cout<<"\ncolor of new vertex is "<<nodeColor[x];
-	
-
 }
 
 void add_vertex(vector< vector<int> > &adj, vector< vector<int> > &adjMat, int &c, vector<int> &nodeColor, int &v, int &e) {
@@ -172,15 +165,10 @@ void add_vertex(vector< vector<int> > &adj, vector< vector<int> > &adjMat, int &
 	int x = adj.size();
 
 	adj.resize(x+1);
-	//adjMat[x] = new int[x+1];
 	nodeColor.push_back(-1);
 
 	vector<int> zeroVec(v, 0);
 	adjMat.push_back(zeroVec);
-
-	// for(int i = 0; i < x+1; i++) {
-	// 	adjMat[x][i] = 0;
-	// }
 
 	cout<<"enter the neighbors: ";
 	for(int i = 0; i < t; i++) {
@@ -236,33 +224,17 @@ void delete_vertex(vector< vector<int> > &adj, vector< vector<int> > &adjMat, ve
 
 	}
 
-	cout<<"\nadj updated";
-
-	//delete [] adjMat[x];
 	adjMat.erase(adjMat.begin() + x);
-
-	// cout<<"\nrow x deleted";
-
-	// cout<<"\nn - 1 value"<<v-1;
 
 	for(int i = 0; i < v - 1; i++) {
 
-		cout<<"\ninside row "<<i;
-
 		for(int j = x; j < v - 1; j++) {
-
-			cout<<"\n\tchecking "<<j<<"th ele of the row";
 
 			adjMat[i][j] = adjMat[i][j+1];
 
 		}
 
-		cout<<"\n\tmaking last ele null";
-
-		//adjMat[i][n-1] = -1;
 		adjMat[i].pop_back();
-
-		cout<<"\n\tmade last ele null";
 
 	}
 
@@ -295,30 +267,22 @@ int main() {
 
 	vector< vector<int> > adjMat = createAdjMat(adj, V);
 
-	cout<<"\n";
-	printGraph(adj, V);
-	cout<<"\n";
-
 	int c = 1;
 	vector<int> nodeColor(V, -1);
 
 	WPALGO(adjMat, V, c, nodeColor);
-
-	cout<<"\n\nc value is"<<c;
+	printGraph(adj, V);
+	displayColors(nodeColor);
 
 	/*  Call insert funcion */
 	add_vertex(adj, adjMat, c, nodeColor, V, E);
-
-	// cout<<"\n";
-	// printGraph(adj, V);
-	// cout<<"\n";
+	printGraph(adj, V);
+	displayColors(nodeColor);
 
 	/*  Call delete funcion */
 	delete_vertex(adj, adjMat, nodeColor, V, E);
-
-	cout<<"\n";
 	printGraph(adj, V);
-	cout<<"\n";
+	displayColors(nodeColor);
 	
 	/*  Call chromatic validator funcion */
 	int y;
@@ -328,7 +292,7 @@ int main() {
 
 	/*  Call rainbow funcion */
 	int x;
-    cout<<"\n enter the vertex to check for rainbow neighborhood: ";
+    cout<<"\n\nenter the vertex to check for rainbow neighborhood: ";
     cin>>x;
 	bool rainbow = rainbowNeighborhood(adj, x-1, nodeColor, c-1);
 	if(rainbow)
@@ -340,7 +304,7 @@ int main() {
 	vector<int> k(V+1, 0);
 	chromaticPolynomial(adj,V,E,k);
     string polynomial = generatePoly(V, k);
-    cout<<"\nthe chromatic polynomial is:\n";
+    cout<<"\n\nthe chromatic polynomial is:\n";
     cout<<polynomial;
 
 	cout<<"\n\n";
