@@ -8,18 +8,18 @@ bool rainbowNeighborhood(vector<vector<int>> adj, int x, vector<int> colors, int
     if(adj[x].size() < c-1)
         return false;
 
-    int colorCount[c];
+    bool colorPresent[c];
 
-    colorCount[colors[x] - 1] = 1;
+    colorPresent[colors[x] - 1] = 1;
 
     for(int i = 0; i < adj[x].size(); i++) {
 
-        colorCount[colors[adj[x][i]] - 1]++;
+        colorPresent[colors[adj[x][i]] - 1] = 1;
 
     }
 
     for(int i = 0; i < c; i++) {
-        if(colorCount[i] == 0)
+        if(colorPresent[i] == 0)
             return false;
     }
 
