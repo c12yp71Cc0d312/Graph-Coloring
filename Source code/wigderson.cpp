@@ -3,7 +3,7 @@
 #include <unordered_set>
 #include "chromaticpoly.cpp"
 #include "rainbow.cpp"
-#include "mcoloring.cpp"
+#include "mcoloringWegderson.cpp"
 using namespace std;
 
 void ColorNeighbourhood(vector<unordered_set<int>> f, int i, int &c, vector<int> &colors, vector<bool> &present)
@@ -73,6 +73,24 @@ void ColorNeighbourhood(vector<unordered_set<int>> f, int i, int &c, vector<int>
     {
         present[*itr - 1] = false;
     }
+}
+
+vector<vector<int>> createAdjMat(vector< vector<int> > adj, int n) {
+
+	vector<int> zeroRow(n, 0);
+	vector< vector<int> > adjMat(n, zeroRow);
+
+	for(int i = 0; i < n; i++) {
+
+		for(int j = 0; j < adj[i].size(); j++) {
+
+			adjMat[i][adj[i][j]] = 1;
+
+		}
+
+	}
+
+	return adjMat;
 }
 
 void colorRemainingVertices(vector< unordered_set<int> > arrNei, int &c, vector<int> &colors, vector<bool> &present) {
@@ -303,6 +321,7 @@ int main() {
     cin>>V;
     vector< unordered_set<int> > adj(V);
     vector< vector<int> > adjVec(V);
+    vector< vector<int> > adjMat = createAdjMat(adjVec, V);
 
     cout<<"enter the no of edges: ";
     cin>>E;
@@ -356,7 +375,7 @@ int main() {
 			int y;
             cout<<"\n\nenter no of colors to check whether graph can be colored with at max: ";
             cin>>y;
-            kChromaticValidation(adjVec, V, y);
+            KChromaticValidator(adjMat, V, y);
 			break;
 		}
 

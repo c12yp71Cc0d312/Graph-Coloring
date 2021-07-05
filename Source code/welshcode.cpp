@@ -4,7 +4,7 @@
 #include <queue>
 #include "chromaticpoly.cpp"
 #include "rainbow.cpp"
-#include "mcoloring.cpp"
+#include "mcoloringWelsh.cpp"
 using namespace std;
 
 struct NodeDegree {
@@ -300,7 +300,7 @@ int main() {
 			int y;
 			cout<<"\n\nenter no of colors to check whether graph can be colored with at max: ";
 			cin>>y;
-			kChromaticValidation(adj, V, y);
+			kChromaticValidation(adjMat, V, y);
 			break;
 		}
 
